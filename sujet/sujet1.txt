@@ -1,0 +1,109 @@
+#############
+## Sujet 1
+#############
+
+Fort du succès de l'application Too Good to Go, le bassin de l'Artois souhaite se doter d'une application équivalente pour la valorisation
+des commerces de proximité de son territoire.
+Nous vous proposons de participer au développement de cette application mobile.
+
+Il s'agit d'un site Internet, accessible uniquement sur mobile permettant la réservation de paniers repas, légumes, boulangerie... à vernir retirer directement chez le commerçant.
+Certaines fonctionnalités de l'application sont déjà opérationnelles comme notamment la partie publique du site (page d'accueil, de connexion et d'inscription).
+Un template spécifique pour la partie connectée sera à définir.
+
+
+Le fichier data.sql, situé dans le répertoire database vous permet de charger votre base de données avec un jeu de données minimal.
+Les normes du framework doivent être respectées (URL, nommage des fichiers, utilisation des paramètres, fonctions et requêtes SQL,...).
+Vous ne pouvez utiliser que les notations, fonctions, structures de données vues dans le cadre du cours. Attention à l'utilisation excessive et non maitrisée de l'IA.
+
+Evaluation :
+2 notes comptant dans les modules développement web et intégration web.
+Partie dev (PHP) : 10pts
+Partie HTML/CSS : 10pts
+
+
+Votre travail :
+####################
+1) développer la page principale du site listant les paniers disponibles à la date du jour. Le visuel de cette page
+sera conforme au visuel du fichier paniersdujour.png.
+
+Cette page correspond au lien "Découvrir" de menu bas.
+
+Quelques informations :
+  - URL : index.php?page=paniersdujour
+  - Requête SQL : "select panier.*, categorie.intitule, entreprise.nom from panier
+                   inner join entreprise on panier.idEntreprise = entreprise.id
+                   inner join categorie on panier.idCategorie = categorie.id
+                   where dateRetrait=XXX order by dateRetrait, heureDebut"
+    avec XXX représentant la date à laquelle les paniers sont à retirer.
+  - La date du jour (au format mysql) peut être obtenue avec la fonction : date('Y-m-d') ou plus simplement en fournissant une chaine de caractères : "2025-06-10"
+  - On utilisera le moteur de templates Blade pour générer les vues.
+    Les menus (haut et bas) seront factorisés dans le layout général afin de les rendre visible sur toutes les pages du site.
+    On rappelle que le framework dispose de deux fonctions pour le formatage des dates et des heures :
+      {{date_format($maDate)}} et {{time_forma{{$monHeure}}}}
+  - Eléments de design :
+       - Le site : font-family: 'Poppins', sans-serif;
+       - La couleur de fond du site : rgba(248, 240, 236, 1);
+       - la bordure de chaque panier : box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+       - les stickers (catégorie):
+              fond : rgba(248, 240, 236, 1);
+              couleur du texte : rgba(16,65,63,1)
+       - les menus haut et bas :
+              bordure et couleur du texte (menu bas) : rgba(16,65,63,1)
+              ombrage (menu haut et menu bas): box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+
+
+
+####################
+2) développer la page visuPanier affichant le détail d'un panier. Le visuel de cette page
+sera conforme au visuel du fichier visuPanier.png.
+
+Quelques informations :
+  - URL : index.php?page=visuPanier&index=XX (avec XX représentant l'ID du panier)
+  - Requête SQL : "select * from panier
+                   inner join entreprise on panier.idEntreprise = entreprise.id
+                   inner join categorie on panier.idCategorie = categorie.id
+                   where panier.id=XXX" avec XXX représentant l'index du panier
+  - On utilisera le moteur de templates Blade pour générer les vues.
+  - Les menus haut et bas seront redéfinis spécifiquement pour cette page, le menu bas est remplacé par un lien vers la page réserver et le menu haut est
+    remplacé par un lien vers la page panierdujour.
+  - Le lien Réserver permet d'accéder à la page ci-dessous (question 3) : index.php?page=resaPanier&index=XX (avec XX l'ID du panier)
+  - Eléments de design :
+      - le menu haut : couleur noire et fond blanc semi-transparent: rgba(255, 255, 255, 0.5);
+      - le menu bas : couleur blanche, fond vert rgba(20, 79, 77, 1) et bordure verte rgba(16, 65, 63, 1);
+      - le sticker nbPanierDisponible : fond : rgba(248, 240, 236, 1) et couleur du texte : rgba(16,65,63,1)
+      - le sticker catégorie : couleur blanche et fond rgba(16,65,63,1)
+      - les différents éléments de la page sont séparés par une bordure grise (gray)
+
+
+####################
+3) développer la page resaPanier du site affichant le formulaire de réservation du panier. Le visuel de cette page
+sera conforme au visuel du fichier resaPanier.png.
+  - URL : index.php?page=resaPanier&index=XX (avec XX représentant l'ID du panier à réserver)
+  - Requête SQL : La requête est identique à celle de la question précédente
+  - La page affiche un formulaire (POST) : index.php?action=reserver permettant la réservation d'un panier.
+    L'identifiant du panier à réserver est fourni sous la forme d'un paramètre non visible sur la page.
+
+  - On utilisera le moteur de templates Blade pour générer les vues.
+  - le visuel du menu haut est identique à la question précédente, il redirige cette fois ci l'utilisateur sur la page index.php?page=visuPanier&index=XX
+    avec XX représentant l'index du panier.
+  - le menu bas est redéfini par un ensemble vide
+
+  - Eléments de design :
+        - le sticker : fond : rgba(248, 240, 236, 1) et couleur du texte : rgba(16,65,63,1)
+        - le bouton réserver : couleur blanche, fond vert rgba(20, 79, 77, 1) et bordure verte rgba(16, 65, 63, 1);
+        - le total : fond gris #EFEFEF
+
+
+####################
+4) développer la page d'insertion d'une réservation dans la base de données (traitement du formulaire).
+Quelques informations :
+  - URL : index.php?action=reserver
+  - Requête SQL : "insert into reservation (date, idPanier, idUser, nb) values (now(), XXX, YYY, 1)" avec XXX représentant l'index du panier à réserver et YYY l'index de l'utilisateur effectuant la réservation.
+  Remarque : Comme indiqué sur la page, on ne peut réserver qu'un seul panier d'ou la présence de la valeur 1 dans la requête.
+
+  Attention avant d'effectuer une réservation :
+    - puisqu'on ne peut réserver qu'un seul panier, il est nécessaire de vérifier qu'il n'existe pas déjà une réservation pour le même panier et pour le
+      même utilisateur.
+    - il faut également vérifier l'intégrité des données : c'est à dire que l'index du panier fait bien référence à un panier présent dans la base.
+
+  - Quand l'ajout de la réservation est effectuée on affichera à l'utilisateur une page de remerciement ou alors on redirigera l'utilisateur sur la page panierdujour du site.

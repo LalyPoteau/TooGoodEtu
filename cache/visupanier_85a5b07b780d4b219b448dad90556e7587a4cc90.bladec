@@ -1,0 +1,29 @@
+<?php $_shouldextend[1]=1; ?>
+<?php $this->startSection('content'); ?>
+<?php $__currentLoopData = $panier; $this->addLoop($__currentLoopData);$this->getFirstLoop();
+ foreach($__currentLoopData as $info): $loop = $this->incrementLoopIndices();  ?>
+<div class="banner_panier">
+<a href="index.php?page=panierdujour" class="retour"> <i class='bx bx-chevron-left' ></i> </a>
+ <img src="<?php echo \htmlentities(URL_PUBLIC??'', ENT_QUOTES, 'UTF-8', false); ?><?php echo \htmlentities($info['img_url']??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <span class="etiquette_restant">plus que <?php echo \htmlentities($info['nbPanier']??'', ENT_QUOTES, 'UTF-8', false); ?> </span>
+ <h2> <?php echo \htmlentities($info['nom']??'', ENT_QUOTES, 'UTF-8', false); ?> </h2>
+</div>
+<div class="main_info_panier">
+ <h3> <?php echo \htmlentities($info['prix']??'', ENT_QUOTES, 'UTF-8', false); ?> € </h3>
+ <p> <i class='bx bx-time-five' ></i> à récupérer : <?php echo \htmlentities($info['heureDebut']??'', ENT_QUOTES, 'UTF-8', false); ?> - <?php echo \htmlentities($info['heureFin']??'', ENT_QUOTES, 'UTF-8', false); ?> (<?php echo \htmlentities($info['dateRetrait']??'', ENT_QUOTES, 'UTF-8', false); ?>) </p>
+ <p> <i class='bx bx-location-plus' ></i> <?php echo \htmlentities($info['adresse']??'', ENT_QUOTES, 'UTF-8', false); ?> </br> <?php echo \htmlentities($info['ville']??'', ENT_QUOTES, 'UTF-8', false); ?> </p>
+ <p class="inclusion_bouton"><strong>Ce que vous pouvez savoir </strong> </br> <?php echo \htmlentities($info['description']??'', ENT_QUOTES, 'UTF-8', false); ?> </br>
+</p>
+<p class="bouton"><?php echo \htmlentities($info['intitule']??'', ENT_QUOTES, 'UTF-8', false); ?> </p>
+
+ 
+</div>
+<?php $this->stopSection(); ?>
+
+<?php $this->startSection('bottom_menu'); ?>
+
+<a href="index.php?page=resaPanier&index=<?php echo \htmlentities($info['id']??'', ENT_QUOTES, 'UTF-8', false); ?>" class="bouton_panier"> Réserver </a>
+<?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+
+<?php $this->stopSection(); ?>
+<?php if (isset($_shouldextend[1])) { echo $this->runChild('templates.appV1'); } ?>
